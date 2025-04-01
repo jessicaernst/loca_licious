@@ -67,7 +67,7 @@ class _AddRestaurantDialogState extends State<AddRestaurantDialog> {
       actions: [
         TextButton(
           onPressed: () {
-            Navigator.of(context).pop(); // Schließe das Popup
+            Navigator.of(context).pop();
           },
           child: const Text('Abbrechen'),
         ),
@@ -99,7 +99,7 @@ class _AddRestaurantDialogState extends State<AddRestaurantDialog> {
                   'category': category,
                 };
                 widget.onRestaurantAdded(restaurant);
-                Navigator.of(context).pop(); // Schließe das Popup
+                Navigator.of(context).pop();
               } else {
                 // Fehlerbehandlung: Ungültige Bewertung
                 ScaffoldMessenger.of(context).showSnackBar(
