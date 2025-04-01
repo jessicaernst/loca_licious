@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:loca_licious/data/models/restaurant.dart';
 import 'package:loca_licious/data/repositories/restaurants_repo.dart';
-import 'package:loca_licious/features/detail/widgets/edit_restaurant_view.dart';
+import 'package:loca_licious/features/detail/widgets/edit_restaurant_dialog.dart';
 
 class RestaurantDetailPage extends StatefulWidget {
   const RestaurantDetailPage({

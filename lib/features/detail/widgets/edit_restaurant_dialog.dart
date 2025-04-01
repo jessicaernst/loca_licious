@@ -1,22 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:loca_licious/data/models/restaurant.dart';
 
-class AddRestaurantDialog extends StatefulWidget {
-  final Function(Map<String, dynamic>) onRestaurantAdded;
+class EditRestaurantDialog extends StatefulWidget {
+  final Restaurant restaurant;
+  final Function(Map<String, dynamic>) onRestaurantUpdated;
 
-  const AddRestaurantDialog({super.key, required this.onRestaurantAdded});
+  const EditRestaurantDialog({
+    super.key,
+    required this.restaurant,
+    required this.onRestaurantUpdated,
+  });
 
   @override
-  State<AddRestaurantDialog> createState() => _AddRestaurantDialogState();
+  State<EditRestaurantDialog> createState() => _EditRestaurantDialogState();
 }
 
-class _AddRestaurantDialogState extends State<AddRestaurantDialog> {
+class _EditRestaurantDialogState extends State<EditRestaurantDialog> {
   final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
-  final _postalCodeController = TextEditingController();
-  final _ratingController = TextEditingController();
-  final _adressController = TextEditingController();
-  final _cityController = TextEditingController();
-  final _categoryController = TextEditingController();
+  late final TextEditingController _nameController;
+  late final TextEditingController _postalCodeController;
+  late final TextEditingController _ratingController;
+  late final TextEditingController _adressController;
+  late final TextEditingController _cityController;
+  late final TextEditingController _categoryController;
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController = TextEditingController(text: widget.restaurant.name);
+    _postalCodeController = TextEditingController(
+      text: widget.restaurant.postalCode,
+    );
+    _ratingController = TextEditingController(
+      text: widget.restaurant.rating.toString(),
+    );
+    _adressController = TextEditingController(text: widget.restaurant.adress);
+    _cityController = TextEditingController(text: widget.restaurant.city);
+    _categoryController = TextEditingController(
+      text: widget.restaurant.category,
+    );
+  }
 
   @override
   void dispose() {
@@ -32,7 +55,7 @@ class _AddRestaurantDialogState extends State<AddRestaurantDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Neues Restaurant hinzufügen'),
+      title: const Text('Restaurant bearbeiten'),
       content: SingleChildScrollView(
         child: Form(
           key: _formKey,
@@ -56,12 +79,8 @@ class _AddRestaurantDialogState extends State<AddRestaurantDialog> {
                   if (value == null || value.isEmpty) {
                     return 'Bitte eine Postleitzahl eingeben';
                   }
-                  if (value.length != 5) {
-                    return 'Bitte eine gültige Postleitzahl eingeben';
-                  }
                   return null;
                 },
-                keyboardType: TextInputType.number,
               ),
               TextFormField(
                 controller: _ratingController,
@@ -122,7 +141,6 @@ class _AddRestaurantDialogState extends State<AddRestaurantDialog> {
         TextButton(
           onPressed: () {
             if (_formKey.currentState!.validate()) {
-              // Hier die Daten aus den Textfeldern holen und das Restaurant hinzufügen
               final name = _nameController.text.trim();
               final postalCode = _postalCodeController.text.trim();
               final ratingString = _ratingController.text.trim();
@@ -131,8 +149,8 @@ class _AddRestaurantDialogState extends State<AddRestaurantDialog> {
               final category = _categoryController.text.trim();
               final rating = int.tryParse(ratingString)!;
 
-              // Erstelle die Map für das Restaurant
               final restaurant = <String, dynamic>{
+                'id': widget.restaurant.id,
                 'name': name,
                 'postalCode': postalCode,
                 'rating': rating,
@@ -140,11 +158,11 @@ class _AddRestaurantDialogState extends State<AddRestaurantDialog> {
                 'city': city,
                 'category': category,
               };
-              widget.onRestaurantAdded(restaurant);
+              widget.onRestaurantUpdated(restaurant);
               Navigator.of(context).pop();
             }
           },
-          child: const Text('Hinzufügen'),
+          child: const Text('Speichern'),
         ),
       ],
     );
