@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:loca_licious/data/repositories/restaurants_repo.dart';
-import 'package:loca_licious/features/detail/restaurant_details_page.dart';
+import 'package:loca_licious/features/home/widgets/filter_view.dart';
+import 'package:loca_licious/features/home/widgets/restaurant_list_view.dart';
 
 class FilterHomePage extends StatefulWidget {
   const FilterHomePage({super.key, required this.repo});
@@ -27,15 +28,9 @@ class _FilterHomePageState extends State<FilterHomePage> {
 
     // 🟢 Kombination Rating + PLZ
     if (rating != null && postalCode.isNotEmpty) {
-      return widget.repo.streamRestaurants().map(
-        (list) =>
-            list
-                .where(
-                  (r) =>
-                      r['rating'] == rating &&
-                      r['postalCode']?.toString() == postalCode,
-                )
-                .toList(),
+      return widget.repo.streamRestaurantsByRatingAndPostalCode(
+        rating,
+        postalCode,
       );
     }
 
@@ -61,39 +56,18 @@ class _FilterHomePageState extends State<FilterHomePage> {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            DropdownButtonFormField<int>(
-              value: selectedRating,
-              hint: const Text('Alle Bewertungen'),
-              items: [
-                const DropdownMenuItem<int>(
-                  value: null,
-                  child: Text('Alle Bewertungen'),
-                ),
-                ...List.generate(5, (i) => i + 1).map(
-                  (e) => DropdownMenuItem(
-                    value: e,
-                    child: Row(
-                      children: List.generate(
-                        e,
-                        (index) => const Icon(
-                          Icons.star,
-                          size: 16,
-                          color: Colors.amber,
-                        ),
-                      ),
-                    ),
-                  ),
+            ExpansionTile(
+              title: const Text('Filter'),
+              childrenPadding: const EdgeInsets.all(16),
+              children: [
+                FilterView(
+                  postalCodeController: _postalCodeController,
+                  selectedRating: selectedRating,
+                  onRatingChanged:
+                      (rating) => setState(() => selectedRating = rating),
+                  onPostalCodeChanged: () => setState(() {}),
                 ),
               ],
-              onChanged: (val) => setState(() => selectedRating = val),
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              controller: _postalCodeController,
-              decoration: const InputDecoration(labelText: 'PLZ'),
-              keyboardType: TextInputType.number,
-              onChanged:
-                  (value) => setState(() {}), // HIER: onChanged hinzugefügt
             ),
             const SizedBox(height: 20),
             Expanded(
@@ -116,38 +90,9 @@ class _FilterHomePageState extends State<FilterHomePage> {
                     );
                   }
 
-                  return ListView.builder(
-                    itemCount: restaurants.length,
-                    itemBuilder: (context, index) {
-                      final restaurant = restaurants[index];
-                      return ListTile(
-                        title: Text(restaurant['name'] ?? ''),
-                        subtitle: Row(
-                          children: [
-                            Text('${restaurant['postalCode']} • '),
-                            ...List.generate(
-                              (restaurant['rating'] ?? 0),
-                              (i) => const Icon(
-                                Icons.star,
-                                size: 16,
-                                color: Colors.amber,
-                              ),
-                            ),
-                          ],
-                        ),
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder:
-                                  (context) => RestaurantDetailPage(
-                                    restaurantId: restaurant['id'],
-                                    repo: widget.repo,
-                                  ),
-                            ),
-                          );
-                        },
-                      );
-                    },
+                  return RestaurantListView(
+                    restaurants: restaurants,
+                    repo: widget.repo,
                   );
                 },
               ),
