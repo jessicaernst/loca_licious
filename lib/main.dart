@@ -10,11 +10,11 @@ void main() async {
 
   final restaurantsRepo = RestaurantsRepoImpl();
 
-  runApp(MyApp(repo: restaurantsRepo));
+  runApp(App(repo: restaurantsRepo));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key, required this.repo});
+class App extends StatelessWidget {
+  const App({super.key, required this.repo});
 
   final RestaurantsRepo repo;
 
@@ -22,7 +22,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Restaurant Finder',
-      theme: ThemeData(),
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
+      ),
       home: FilterHomePage(repo: repo),
     );
   }

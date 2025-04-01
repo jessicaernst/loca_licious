@@ -31,36 +31,91 @@ class RestaurantDetailPage extends StatelessWidget {
           if (restaurantData == null) {
             return const Center(child: Text('Restaurant nicht gefunden.'));
           }
+
           final restaurant = Restaurant.fromJson(restaurantData, restaurantId);
 
-          return Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  restaurant.name,
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text('Adresse: ${restaurant.adress}'),
-                Text('PLZ: ${restaurant.postalCode}'),
-                const SizedBox(height: 8),
-                Row(
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(20),
+            child: Card(
+              elevation: 2,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Bewertung: '),
-                    ...List.generate(
-                      restaurant.rating,
-                      (index) => const Icon(Icons.star, color: Colors.amber),
+                    // Name
+                    Text(
+                      restaurant.name,
+                      style: Theme.of(context).textTheme.headlineSmall
+                          ?.copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Adresse
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Icon(
+                          Icons.location_on,
+                          size: 20,
+                          color: Colors.grey,
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            '${restaurant.adress}\n${restaurant.postalCode} ${restaurant.city}',
+                            style: Theme.of(context).textTheme.bodyLarge,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Bewertung
+                    Row(
+                      children: [
+                        const Icon(Icons.star, size: 20, color: Colors.grey),
+                        const SizedBox(width: 8),
+                        ...List.generate(
+                          restaurant.rating,
+                          (_) => const Icon(
+                            Icons.star,
+                            size: 18,
+                            color: Colors.amber,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Text('${restaurant.rating} / 5'),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Kategorie
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.restaurant_menu,
+                          size: 20,
+                          color: Colors.grey,
+                        ),
+                        const SizedBox(width: 8),
+                        Chip(
+                          label: Text(restaurant.category),
+                          backgroundColor: Theme.of(
+                            context,
+                          ).colorScheme.secondary.withOpacity(0.1),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-                const SizedBox(height: 8),
-                Text('Kategorie: ${restaurant.category}'),
-              ],
+              ),
             ),
           );
         },

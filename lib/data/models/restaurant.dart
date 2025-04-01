@@ -43,6 +43,10 @@ class Restaurant {
   /// `final` bedeutet, dass dieser Wert nach der Erstellung des Objekts nicht mehr geändert werden kann.
   final String adress;
 
+  /// Die Stadt in der das Restaurant ist
+  /// `final` bedeutet, dass dieser Wert nach der Erstellung des Objekts nicht mehr geändert werden kann.
+  final String city;
+
   /// Die Kategorie des Restaurants (z.B. Italienisch, Chinesisch).
   /// `final` bedeutet, dass dieser Wert nach der Erstellung des Objekts nicht mehr geändert werden kann.
   final String category;
@@ -57,6 +61,7 @@ class Restaurant {
     required this.rating,
     required this.postalCode,
     required this.adress,
+    required this.city,
     required this.category,
   });
 
@@ -77,8 +82,9 @@ class Restaurant {
       rating:
           json['rating'] ??
           0, // Wenn keine Bewertung vorhanden ist, wird 0 verwendet.
-      postalCode: json['postal_code'] ?? '',
+      postalCode: json['postalCode'] ?? '',
       adress: json['adress'] ?? '',
+      city: json['city'] ?? '',
       category: json['category'] ?? '',
     );
   }
@@ -93,6 +99,7 @@ class Restaurant {
       'rating': rating,
       'postal_code': postalCode,
       'adress': adress,
+      'city': city,
       'category': category,
     };
   }
