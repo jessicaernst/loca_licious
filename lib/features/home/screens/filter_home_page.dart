@@ -27,7 +27,6 @@ class _FilterHomePageState extends State<FilterHomePage> {
 
     // 🟢 Kombination Rating + PLZ
     if (rating != null && postalCode.isNotEmpty) {
-      // HIER: plz zu postalCode geändert
       return widget.repo.streamRestaurants().map(
         (list) =>
             list
@@ -47,10 +46,7 @@ class _FilterHomePageState extends State<FilterHomePage> {
 
     // 🟢 Nur PLZ
     if (postalCode.isNotEmpty) {
-      // HIER: plz zu postalCode geändert
-      return widget.repo.streamRestaurantsByPostalCode(
-        postalCode,
-      ); // HIER: plz zu postalCode geändert
+      return widget.repo.streamRestaurantsByPostalCode(postalCode);
     }
 
     // 🟢 Kein Filter → alle
@@ -96,6 +92,8 @@ class _FilterHomePageState extends State<FilterHomePage> {
               controller: _postalCodeController,
               decoration: const InputDecoration(labelText: 'PLZ'),
               keyboardType: TextInputType.number,
+              onChanged:
+                  (value) => setState(() {}), // HIER: onChanged hinzugefügt
             ),
             const SizedBox(height: 20),
             Expanded(
@@ -138,7 +136,6 @@ class _FilterHomePageState extends State<FilterHomePage> {
                           ],
                         ),
                         onTap: () {
-                          // HIER: onTap hinzugefügt
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder:

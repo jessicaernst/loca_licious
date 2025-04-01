@@ -28,10 +28,7 @@ class RestaurantsRepoImpl implements RestaurantsRepo {
     String postalCode,
   ) {
     return _restaurantsRef
-        .where(
-          'postalCode',
-          isEqualTo: postalCode,
-        ) // HIER: plz zu postalCode geändert
+        .where('postalCode', isEqualTo: postalCode)
         .snapshots()
         .map(
           (snap) =>
@@ -54,14 +51,16 @@ class RestaurantsRepoImpl implements RestaurantsRepo {
   @override
   Future<Map<String, dynamic>> getRestaurantById(String id) async {
     final doc = await _restaurantsRef.doc(id).get();
-    if (doc.exists) return doc.data()!;
+    if (doc.exists) {
+      return {...doc.data()!, 'id': doc.id};
+    }
     throw Exception('Restaurant with id $id not found');
   }
 
   @override
   Future<List<Map<String, dynamic>>> getRestaurants() async {
     final snapshot = await _restaurantsRef.get();
-    return snapshot.docs.map((doc) => doc.data()).toList();
+    return snapshot.docs.map((doc) => {...doc.data(), 'id': doc.id}).toList();
   }
 
   @override
@@ -69,15 +68,17 @@ class RestaurantsRepoImpl implements RestaurantsRepo {
     String postalCode,
   ) async {
     final snapshot =
-        await _restaurantsRef.where('plz', isEqualTo: postalCode).get();
-    return snapshot.docs.map((doc) => doc.data()).toList();
+        await _restaurantsRef
+            .where('postalCode', isEqualTo: postalCode)
+            .get(); // HIER: plz zu postalCode geändert
+    return snapshot.docs.map((doc) => {...doc.data(), 'id': doc.id}).toList();
   }
 
   @override
   Future<List<Map<String, dynamic>>> getRestaurantsByRating(int rating) async {
     final snapshot =
         await _restaurantsRef.where('rating', isEqualTo: rating).get();
-    return snapshot.docs.map((doc) => doc.data()).toList();
+    return snapshot.docs.map((doc) => {...doc.data(), 'id': doc.id}).toList();
   }
 
   @override

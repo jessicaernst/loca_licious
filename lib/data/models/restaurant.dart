@@ -65,13 +65,14 @@ class Restaurant {
   /// Hier wird er verwendet, um die Erstellung eines `Restaurant`-Objekts aus einem JSON-Format zu vereinfachen.
   /// `toJson` wird verwendet, da JSON das Standardformat für Web-APIs und Firestore ist.
   /// `Map` ist Dart-spezifisch.
-  factory Restaurant.fromJson(Map<String, dynamic> json, String id) {
+  factory Restaurant.fromJson(Map<String, dynamic> json, String restaurantId) {
+    // HIER: String id entfernt
     /// Gibt ein neues `Restaurant`-Objekt zurück, das aus den Daten des JSON-Objekts erstellt wurde.
     /// `json['name'] ?? ''` bedeutet: Wenn `json['name']` einen Wert hat, wird dieser verwendet.
     /// Wenn `json['name']` `null` ist, wird stattdessen ein leerer String (`''`) verwendet.
     /// Das `??` ist der Null-Aware-Operator.
     return Restaurant(
-      id: id, // Die ID wird separat übergeben.
+      id: json['id'], // HIER: json['id'] verwendet
       name: json['name'] ?? '',
       rating:
           json['rating'] ??
