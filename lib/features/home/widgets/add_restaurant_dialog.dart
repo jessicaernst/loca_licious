@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loca_licious/data/models/restaurant.dart';
 
 class AddRestaurantDialog extends StatefulWidget {
   final Function(Map<String, dynamic>) onRestaurantAdded;
@@ -131,16 +132,19 @@ class _AddRestaurantDialogState extends State<AddRestaurantDialog> {
               final category = _categoryController.text.trim();
               final rating = int.tryParse(ratingString)!;
 
-              // Erstelle die Map für das Restaurant
-              final restaurant = <String, dynamic>{
-                'name': name,
-                'postalCode': postalCode,
-                'rating': rating,
-                'adress': adress,
-                'city': city,
-                'category': category,
-              };
-              widget.onRestaurantAdded(restaurant);
+              // Erstelle das Restaurant-Objekt
+              final restaurant = Restaurant(
+                id: '', // Die ID wird von Firestore generiert
+                name: name,
+                postalCode: postalCode,
+                rating: rating,
+                adress: adress,
+                city: city,
+                category: category,
+              );
+
+              // Übergib die Map an das übergeordnete Widget
+              widget.onRestaurantAdded(restaurant.toJson());
               Navigator.of(context).pop();
             }
           },

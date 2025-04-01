@@ -141,24 +141,27 @@ class _EditRestaurantDialogState extends State<EditRestaurantDialog> {
         TextButton(
           onPressed: () {
             if (_formKey.currentState!.validate()) {
+              // Hier die Daten aus den Textfeldern holen
               final name = _nameController.text.trim();
               final postalCode = _postalCodeController.text.trim();
-              final ratingString = _ratingController.text.trim();
+              final rating = int.parse(_ratingController.text.trim());
               final adress = _adressController.text.trim();
               final city = _cityController.text.trim();
               final category = _categoryController.text.trim();
-              final rating = int.tryParse(ratingString)!;
 
-              final restaurant = <String, dynamic>{
-                'id': widget.restaurant.id,
-                'name': name,
-                'postalCode': postalCode,
-                'rating': rating,
-                'adress': adress,
-                'city': city,
-                'category': category,
-              };
-              widget.onRestaurantUpdated(restaurant);
+              // Erstelle das Restaurant-Objekt
+              final restaurant = Restaurant(
+                id: widget.restaurant.id, // Die ID ist bereits vorhanden
+                name: name,
+                postalCode: postalCode,
+                rating: rating,
+                adress: adress,
+                city: city,
+                category: category,
+              );
+
+              // Übergib die Map an das übergeordnete Widget
+              widget.onRestaurantUpdated(restaurant.toJson());
               Navigator.of(context).pop();
             }
           },
