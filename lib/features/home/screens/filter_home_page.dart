@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loca_licious/data/repositories/restaurants_repo.dart';
+import 'package:loca_licious/features/home/widgets/add_restaurant_dialog.dart';
 import 'package:loca_licious/features/home/widgets/filter_view.dart';
 import 'package:loca_licious/features/home/widgets/restaurant_list_view.dart';
 
@@ -48,10 +49,53 @@ class _FilterHomePageState extends State<FilterHomePage> {
     return widget.repo.streamRestaurants();
   }
 
+  void _showAddRestaurantPopup(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AddRestaurantDialog(
+          onRestaurantAdded: (restaurant) {
+            _addRestaurant(restaurant);
+          },
+        );
+      },
+    );
+  }
+
+  // Die Methode erwartet jetzt eine Map
+  void _addRestaurant(Map<String, dynamic> restaurant) async {
+    try {
+      // Übergib die Map direkt an die Methode im Repo
+      await widget.repo.addRestaurant(restaurant);
+
+      // Prüfe, ob das Widget noch im Baum ist, bevor du mit ScaffoldMessenger interagierst
+      if (mounted) {
+        // Erfolgsmeldung
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Restaurant hinzugefügt!')),
+        );
+      }
+    } catch (e) {
+      // Prüfe, ob das Widget noch im Baum ist, bevor du mit ScaffoldMessenger interagierst
+      if (mounted) {
+        // Fehlermeldung
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Fehler beim Hinzufügen des Restaurants: $e')),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Restaurants')),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _showAddRestaurantPopup(context);
+        },
+        child: const Icon(Icons.add),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(

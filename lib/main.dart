@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:loca_licious/data/repositories/restaurants_repo.dart';
 import 'package:loca_licious/data/repositories/restaurants_repo_impl.dart';
 import 'package:loca_licious/features/home/screens/filter_home_page.dart';
@@ -24,6 +25,7 @@ class App extends StatelessWidget {
       title: 'Restaurant Finder',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
+        textTheme: GoogleFonts.urbanistTextTheme(),
       ),
       home: FilterHomePage(repo: repo),
     );
