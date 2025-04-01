@@ -77,7 +77,7 @@ class Restaurant {
     /// Wenn `json['name']` `null` ist, wird stattdessen ein leerer String (`''`) verwendet.
     /// Das `??` ist der Null-Aware-Operator.
     return Restaurant(
-      id: json['id'], // HIER: json['id'] verwendet
+      id: json['id'],
       name: json['name'] ?? '',
       rating:
           json['rating'] ??
@@ -97,7 +97,7 @@ class Restaurant {
       'id': id,
       'name': name,
       'rating': rating,
-      'postalCode': postalCode, // Korrektur: postalCode statt postal_code
+      'postalCode': postalCode,
       'adress': adress,
       'city': city,
       'category': category,
