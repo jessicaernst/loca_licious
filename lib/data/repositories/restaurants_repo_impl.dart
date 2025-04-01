@@ -140,14 +140,17 @@ class RestaurantsRepoImpl implements RestaurantsRepo {
   /// Restaurant hinzu.
   @override
   Future<void> addRestaurant(Map<String, dynamic> restaurant) async {
-    /// `_restaurantsRef.doc(restaurant['id'])`: Erstellt eine Referenz auf das
-    /// Dokument mit der ID `restaurant['id']`.
-    final docRef = _restaurantsRef.doc(restaurant['id']);
+    /// `_restaurantsRef.doc()`: Erstellt eine Referenz auf ein neues
+    /// Dokument in der Collection.
+    final docRef = _restaurantsRef.doc();
 
-    /// `await docRef.set(restaurant)`: Fügt das Restaurant-Dokument zu
-    /// Firestore hinzu. `await` bedeutet, dass die Ausführung wartet, bis
-    /// die Operation abgeschlossen ist.
-    await docRef.set(restaurant);
+    /// `await docRef.set({...restaurant, 'id': docRef.id})`: Fügt das
+    /// Restaurant-Dokument zu Firestore hinzu. `await` bedeutet, dass die
+    /// Ausführung wartet, bis die Operation abgeschlossen ist.
+    /// Der Spread-Operator `...` fügt die Daten aus `restaurant` in die
+    /// neue Map ein.
+    /// `'id': docRef.id`: Fügt die generierte ID des Dokuments zur Map hinzu.
+    await docRef.set({...restaurant, 'id': docRef.id});
   }
 
   /// `deleteRestaurant(String id)`: Löscht ein Restaurant anhand seiner ID.

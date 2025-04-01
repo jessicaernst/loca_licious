@@ -97,7 +97,7 @@ class Restaurant {
       'id': id,
       'name': name,
       'rating': rating,
-      'postal_code': postalCode,
+      'postalCode': postalCode, // Korrektur: postalCode statt postal_code
       'adress': adress,
       'city': city,
       'category': category,
