@@ -77,6 +77,7 @@ In loca_licious verwenden wir **Repositories**, um den Code sauber und übersich
 3.  **Testdaten hinzufügen:**
     *   Du kannst Testdaten manuell in der Firebase-Konsole hinzufügen, indem du auf "Collection hinzufügen" klickst und die Felder ausfüllst.
     *   Hier sind ein paar Beispiele für Testdaten:
+    *   ID's solltest du aber von Firestore generieren lassen einfach
 
         ```json
         {
