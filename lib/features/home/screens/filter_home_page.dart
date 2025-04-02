@@ -67,7 +67,11 @@ class _FilterHomePageState extends State<FilterHomePage> {
     // 🟢 Kein Filter → alle
     // Wenn keine Filter ausgewählt wurden, gib einen Stream von allen
     // Restaurants zurück.
-    return widget.repo.streamRestaurants();
+    // Sortiere die Restaurants alphabetisch nach Stadt.
+    return widget.repo.streamRestaurants().map((restaurants) {
+      restaurants.sort((a, b) => a['city'].compareTo(b['city']));
+      return restaurants;
+    });
   }
 
   /// Diese Methode zeigt das Popup zum Hinzufügen eines neuen Restaurants an.
@@ -114,9 +118,13 @@ class _FilterHomePageState extends State<FilterHomePage> {
     }
   }
 
+  /// Diese Methode erstellt das Widget.
+  /// `context`: Der BuildContext des Widgets.
   @override
   Widget build(BuildContext context) {
+    // `Scaffold`: Das Grundgerüst für die Seite.
     return Scaffold(
+      // `AppBar`: Die obere Leiste der Seite.
       appBar: AppBar(title: const Text('Restaurants')),
       // `FloatingActionButton`: Der schwebende Button zum Hinzufügen eines Restaurants.
       floatingActionButton: FloatingActionButton(
@@ -129,6 +137,7 @@ class _FilterHomePageState extends State<FilterHomePage> {
       // `body`: Der Hauptinhalt der Seite.
       body: Padding(
         padding: const EdgeInsets.all(16),
+        // `Column`: Ein Widget, das seine Kinder vertikal anordnet.
         child: Column(
           children: [
             // `ExpansionTile`: Ein Widget, das einen Bereich zum Ein- und Ausklappen anzeigt.
@@ -146,7 +155,9 @@ class _FilterHomePageState extends State<FilterHomePage> {
                 ),
               ],
             ),
+            // `SizedBox`: Ein Widget, das einen Abstand hinzufügt.
             const SizedBox(height: 20),
+            // `Expanded`: Ein Widget, das den verfügbaren Platz einnimmt.
             Expanded(
               // `StreamBuilder`: Ein Widget, das einen Stream von Daten anzeigt.
               child: StreamBuilder<List<Map<String, dynamic>>>(
