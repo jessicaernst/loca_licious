@@ -154,12 +154,11 @@ class RestaurantsRepoImpl implements RestaurantsRepo {
   }
 
   /// `deleteRestaurant(String id)`: Löscht ein Restaurant anhand seiner ID.
+  ///  /// `await _restaurantsRef.doc(id).delete()`: Löscht das Dokument mit der
+  /// ID `id` aus Firestore.
   @override
-  Future<void> deleteRestaurant(String id) async {
-    /// `await _restaurantsRef.doc(id).delete()`: Löscht das Dokument mit der
-    /// ID `id` aus Firestore.
-    await _restaurantsRef.doc(id).delete();
-  }
+  Future<void> deleteRestaurant(String id) async =>
+      await _restaurantsRef.doc(id).delete();
 
   /// `getRestaurantById(String id)`: Gibt ein Restaurant anhand seiner ID zurück.
   @override
