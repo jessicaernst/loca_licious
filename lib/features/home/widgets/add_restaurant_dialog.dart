@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:loca_licious/data/models/restaurant.dart';
 
+/// Dieses Widget zeigt das Popup zum Hinzufügen eines neuen Restaurants an.
 class AddRestaurantDialog extends StatefulWidget {
-  final Function(Map<String, dynamic>) onRestaurantAdded;
-
+  /// Der Konstruktor für das `AddRestaurantDialog`-Widget.
+  /// `onRestaurantAdded`: Eine Callback-Funktion, die aufgerufen wird, wenn ein neues Restaurant hinzugefügt wurde.
   const AddRestaurantDialog({super.key, required this.onRestaurantAdded});
+
+  /// Eine Callback-Funktion, die aufgerufen wird, wenn ein neues Restaurant hinzugefügt wurde.
+  final Function(Map<String, dynamic>) onRestaurantAdded;
 
   @override
   State<AddRestaurantDialog> createState() => _AddRestaurantDialogState();
 }
 
 class _AddRestaurantDialogState extends State<AddRestaurantDialog> {
+  // `_formKey`: Ein Schlüssel, um auf den Zustand des Formulars zuzugreifen.
   final _formKey = GlobalKey<FormState>();
+
   final _nameController = TextEditingController();
   final _postalCodeController = TextEditingController();
   final _ratingController = TextEditingController();
@@ -32,22 +38,33 @@ class _AddRestaurantDialogState extends State<AddRestaurantDialog> {
 
   @override
   Widget build(BuildContext context) {
+    // `AlertDialog`: Das Popup-Widget.
     return AlertDialog(
       title: const Text('Neues Restaurant hinzufügen'),
+      // `SingleChildScrollView`: Ermöglicht das Scrollen, wenn der Inhalt zu groß ist.
       content: SingleChildScrollView(
+        // `Form`: Ein Widget, das ein Formular darstellt.
         child: Form(
+          // `key`: Der Schlüssel, um auf den Zustand des Formulars zuzugreifen.
           key: _formKey,
+          // `Column`: Ein Widget, das seine Kinder vertikal anordnet.
           child: Column(
+            // `mainAxisSize`: Definiert die Größe der Hauptachse.
             mainAxisSize: MainAxisSize.min,
             children: [
+              // `TextFormField`: Ein Textfeld mit Validierung.
               TextFormField(
+                // `controller`: Der Controller für das Textfeld.
                 controller: _nameController,
+                // `decoration`: Definiert das Aussehen des Textfelds.
                 decoration: const InputDecoration(labelText: 'Name'),
+                // `validator`: Diese Funktion wird aufgerufen, um die Eingabe zu validieren.
                 validator: (value) {
+                  // Überprüfe, ob das Feld nicht leer ist.
                   if (value == null || value.isEmpty) {
                     return 'Bitte einen Namen eingeben';
                   }
-                  return null;
+                  return null; // `null` bedeutet, dass die Validierung erfolgreich war.
                 },
               ),
               TextFormField(
@@ -113,6 +130,7 @@ class _AddRestaurantDialogState extends State<AddRestaurantDialog> {
           ),
         ),
       ),
+      // `actions`: Die Buttons am unteren Rand des Popups.
       actions: [
         TextButton(
           onPressed: () {
@@ -122,15 +140,15 @@ class _AddRestaurantDialogState extends State<AddRestaurantDialog> {
         ),
         TextButton(
           onPressed: () {
+            // Überprüfe, ob das Formular gültig ist.
             if (_formKey.currentState!.validate()) {
-              // Hier die Daten aus den Textfeldern holen und das Restaurant hinzufügen
+              // Hier die Daten aus den Textfeldern holen
               final name = _nameController.text.trim();
               final postalCode = _postalCodeController.text.trim();
-              final ratingString = _ratingController.text.trim();
+              final rating = int.parse(_ratingController.text.trim());
               final adress = _adressController.text.trim();
               final city = _cityController.text.trim();
               final category = _categoryController.text.trim();
-              final rating = int.tryParse(ratingString)!;
 
               // Erstelle das Restaurant-Objekt
               final restaurant = Restaurant(
@@ -145,6 +163,7 @@ class _AddRestaurantDialogState extends State<AddRestaurantDialog> {
 
               // Übergib die Map an das übergeordnete Widget
               widget.onRestaurantAdded(restaurant.toJson());
+              // Schließe das Popup.
               Navigator.of(context).pop();
             }
           },
